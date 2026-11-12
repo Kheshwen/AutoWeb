@@ -4,6 +4,7 @@
 ### Changed
 - Larger text and taller task rows, so the app is easier to read on high-resolution screens.
 - Scheduled tasks are now registered with Windows 8 compatibility settings, which is the right setting for Windows 10 and 11.
+- Changed application name from 'Website Schedule Launcher' to 'AutoWeb'.
 ### Fixed
 - Website links are quoted again when handed to the browser, the same way as before 3.3.
 
