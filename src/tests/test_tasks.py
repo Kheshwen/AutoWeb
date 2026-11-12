@@ -88,3 +88,4 @@ def test_logs_have_no_query_secrets(caplog):
     caplog.set_level("INFO", logger="launcher")
     TaskService(fake()).register_launch("AutoWeb_a_b", "https://example.com/p?token=SECRET", DT)
     assert "SECRET" not in caplog.text and "example.com" in caplog.text
+

@@ -228,30 +228,10 @@ class WebSchedulerApp:
                 sv_ttk.set_theme(self.mode)
             except Exception:
                 pass
-                
-        # --- SCALING OVERRIDE START ---
         try:
-            import tkinter.font as tkfont
-            # 1. Scale every font proportionally by 1.2x
-            scale_factor = 1.15 
-            for font_name in tkfont.names():
-                f = tkfont.nametofont(font_name)
-                current_size = f.cget("size")
-                
-                # Apply the multiplier, keeping negative pixel sizes intact
-                new_size = int(current_size * scale_factor)
-                if new_size == 0:
-                    new_size = 14 if current_size > 0 else -18
-                    
-                f.configure(size=new_size)
-            
-            # 2. Adjust Treeview row height to fit the scaled text
-            style = ttk.Style()
-            style.configure("Treeview", rowheight=self.px(36))
+            ttk.Style().configure("Treeview", rowheight=self.px(28))
         except Exception:
             pass
-        # --- SCALING OVERRIDE END ---
-
         self.root.configure(bg=pal["bg"])
         if hasattr(self, "tree"):
             self.tree.tag_configure("pending", foreground=pal["accent"])

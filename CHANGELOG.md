@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.31] - November 12 2026
+### Changed
+- Larger text and taller task rows, so the app is easier to read on high-resolution screens.
+- Scheduled tasks are now registered with Windows 8 compatibility settings, which is the right setting for Windows 10 and 11.
+### Fixed
+- Website links are quoted again when handed to the browser, the same way as before 3.3.
+
 ## [3.3] - October 27 2026
 Engineering and security release. No new features.
 ### Security

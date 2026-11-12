@@ -18,7 +18,7 @@ from .validation import (InvalidURL, is_managed_task_name, normalize_url, ps_quo
 
 log = logging.getLogger("launcher.tasks")
 
-ALLOWED_EXES = {"explorer.exe", "shutdown.exe", "launcher.exe"}
+ALLOWED_EXES = {"explorer.exe", "shutdown.exe"}
 SHUTDOWN_ARGS = "/s /t 60"
 CREATE_NO_WINDOW = 0x08000000
 
@@ -35,8 +35,7 @@ PS_LIST = (
 
 
 def launch_exe() -> str:
-    import os
-    return os.path.expandvars(r"%LOCALAPPDATA%\Programs\Opera GX\launcher.exe")
+    return windows_path("explorer.exe")
 
 
 def shutdown_exe() -> str:
@@ -61,7 +60,11 @@ class Task:
 
     @property
     def url(self) -> str:
-        return (self.arg or "").strip().strip('"') if self.kind == "launch" else ""
+        if self.kind != "launch":
+            return ""
+        parts = (self.arg or "").split()
+        return parts[-1].strip('"') if parts else ""
+
 
     @property
     def status(self) -> str:
@@ -96,13 +99,9 @@ def build_register_script(name: str, exe: str, arg: str, dt: datetime, catch_up:
         raise ValueError("Invalid task name.")
     if ntpath.basename(exe).lower() not in ALLOWED_EXES:
         raise ValueError("Program not allowed.")
-    
-    # ADDED: -Compatibility Win8 configures the task for modern Windows (10/11)
-    settings = "New-ScheduledTaskSettingsSet -Compatibility Win8"
-    
+    settings = "New-ScheduledTaskSettingsSet"
     if catch_up:
         settings += " -WakeToRun -StartWhenAvailable"
-        
     return (
         "$ErrorActionPreference = 'Stop'; "
         f"$a = New-ScheduledTaskAction -Execute {ps_quote(exe)} -Argument {ps_quote(arg)}; "
@@ -180,20 +179,10 @@ class TaskService:
     def register_launch(self, name: str, url: str, dt: datetime) -> TaskResult:
         try:
             url = normalize_url(url)
-            
-            # Combine the anti-throttling flags and the URL
-            flags = (
-                "--new-window "
-                "--disable-background-timer-throttling "
-                "--disable-backgrounding-occluded-windows "
-                "--disable-renderer-backgrounding "
-            )
-            arg = f'{flags} "{url}"'
-            
-            script = build_register_script(name, launch_exe(), arg, dt, catch_up=True)
+            exe, arg = launch_exe(), url
+            script = build_register_script(name, exe, arg, dt, catch_up=True)
         except (InvalidURL, ValueError) as exc:
             return TaskResult(False, str(exc))
-            
         res = self._exec(script, "register launch")
         if res.ok:
             log.info("Scheduled launch of %s at %s", redact_url(url), dt.isoformat(timespec="minutes"))

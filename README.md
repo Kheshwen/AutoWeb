@@ -1,4 +1,4 @@
-# Schedule Website Launcher v3.3
+# Schedule Website Launcher v3.31
 
 ## Setup
 1. Download this repo.
@@ -54,14 +54,10 @@
 
 Errors and activity are written to `%APPDATA%\WebsiteLauncher\launcher.log`. Only website host names are logged, never full links.
 
-## What changed from V3.2
-- **Safer Links:** Links are rebuilt and checked. Only `http` and `https` are accepted, and anything that could break out of the scheduled command is refused or encoded.
-- **Safer Commands:** Everything passed to PowerShell is quoted safely, programs run from their full Windows paths, and commands time out after 30 seconds.
-- **Correct Task Types:** A task is a shutdown or a website based on the program it runs, not its name.
-- **Safer Settings:** `settings.json` is validated and saved safely.
-- **Log File:** Errors and activity are saved to `launcher.log`.
-- **Tests:** 45 unit tests, run automatically on GitHub for Windows and Linux.
-- **Cleaner Code:** Split into a `launcher` package instead of one large file.
+## What changed from V3.3
+- **Larger Interface:** Bigger text and taller task rows, so it's easier to read on high-resolution screens.
+- **Windows 10/11 Task Settings:** Scheduled tasks are registered with Windows 8 compatibility settings.
+- **Quoted Links:** Website links are quoted again when handed to the browser, the same way as before 3.3.
 
 ## Restrictions
 - Website launches wake the PC and run late if the time was missed. Shutdown tasks never run late.
@@ -74,7 +70,7 @@ Errors and activity are written to `%APPDATA%\WebsiteLauncher\launcher.log`. Onl
 - Windows Defender may flag the app as a virus. This is a common false positive with PyInstaller apps. You can add the app folder as an exclusion in Windows Security, or report it as a false positive to Microsoft.
 
 ## Future Improvement (Priority Scaled: Top to Bottom)
-- Support MacOS and Linux (I'm also running Linux).
+- Support MacOS and Linux.
 - Recurring schedules (daily/weekly), not just one-off.
 - Run PowerShell calls in the background so the window never pauses.
 - Automatic GitHub releases with the installer attached.
@@ -86,4 +82,4 @@ Errors and activity are written to `%APPDATA%\WebsiteLauncher\launcher.log`. Onl
 - Use an internal Python scheduling library (like APScheduler) to bypass Windows schtasks entirely.
 
 ## Developer Note
-- This is looking good...
+- I've slowdown the patches and update... this is look promising already
