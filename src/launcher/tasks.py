@@ -96,9 +96,13 @@ def build_register_script(name: str, exe: str, arg: str, dt: datetime, catch_up:
         raise ValueError("Invalid task name.")
     if ntpath.basename(exe).lower() not in ALLOWED_EXES:
         raise ValueError("Program not allowed.")
-    settings = "New-ScheduledTaskSettingsSet"
+    
+    # ADDED: -Compatibility Win8 configures the task for modern Windows (10/11)
+    settings = "New-ScheduledTaskSettingsSet -Compatibility Win8"
+    
     if catch_up:
         settings += " -WakeToRun -StartWhenAvailable"
+        
     return (
         "$ErrorActionPreference = 'Stop'; "
         f"$a = New-ScheduledTaskAction -Execute {ps_quote(exe)} -Argument {ps_quote(arg)}; "
