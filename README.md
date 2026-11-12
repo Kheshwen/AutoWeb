@@ -1,4 +1,4 @@
-# Schedule Website Launcher v3.31
+# AutoWeb v3.31
 
 ## Setup
 1. Download this repo.
